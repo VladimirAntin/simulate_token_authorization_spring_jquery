@@ -40,7 +40,27 @@ public class AuthController {
 		}
 		return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
 	}
-	
+
+	@RequestMapping(value = "api/check:{token}") //method get
+	public ResponseEntity<String> check(@PathVariable String token){
+		// user.token = "myapp_"+id
+		String id = token.substring(6);
+		if(Data.users.containsKey(id)){
+			User user = Data.users.get(id);
+			String message = "No one";
+			if(user.getRole().equals("admin")){
+				message="I am "+user.getRole()+"and i have privileges for all services.";
+			}else if(user.getRole().equals("owner")){
+				message="I am "+user.getRole()+" and i dont have privileges for some services.";
+			}else if(user.getRole().equals("bidder")){
+				message="I am "+user.getRole()+" and i dont have privileges for most services.";
+			}
+			return new ResponseEntity<String>(message, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+	}
+
+
 	private static class UserLogin{
 		public String username;
 		public String password;

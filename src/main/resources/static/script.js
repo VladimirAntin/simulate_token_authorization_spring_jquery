@@ -47,6 +47,15 @@ $(document).ready(function() {
         event.preventDefault();
         getMe();
     });
+    $("#check").on('click', function(event) {
+        event.preventDefault();
+        token = localStorage.getItem("myapp_user");
+        $.get( "http://localhost:8080/api/check:"+token, function(data) {
+            message.text(data);
+            message.show();
+            setInterval(function(){ message.hide(); }, 3000);
+        });
+    });
     $("#logout").on("click",function (event) {
         event.preventDefault();
         localStorage.removeItem("myapp_user");
